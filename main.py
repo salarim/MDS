@@ -1,6 +1,7 @@
 import subprocess
 import PIL.ImageDraw as ImageDraw
 import PIL.Image as Image
+from shapely.geometry import LineString, Polygon
 
 def get_random_polygon(radius, max_size):
     compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp"], stdout=subprocess.PIPE)
@@ -26,13 +27,49 @@ def draw_polygon(points, radius):
 
     image.show()
 
+def get_visibility_graph(points):
+    # create polygon
+    coords = [p for p in points]
+    coords.append(points[0])
+    poly = Polygon(coords)
+
+    adj = []
+    for i in range(len(points)):
+        adj.append([])
+        for j in range(len(points)):
+            if i == j:
+                adj[i].append(0)
+                continue
+            line = LineString([(points[i][0], points[i][1]), (points[j][0], points[j][1])])
+            if line.relate(poly)[2] == 'F':
+                adj[i].append(1)
+            else:
+                adj[i].append(0)
+
+    return adj
+
+def draw_visibility_graph(vis_graph, points, radius):
+    image = Image.new("RGB", (2*radius, 2*radius))
+
+    draw = ImageDraw.Draw(image)
+    for i in range(len(points)):
+        for j in range(i+1, len(points)):
+            if vis_graph[i][j]:
+                draw.line([points[i], points[j]], fill=(255,0,0,255))
+
+    image.show()
+
 def run():
     radius = 200
-    max_size = 100
+    max_size = 20
 
     points = get_random_polygon(radius, max_size)
     
-    draw_polygon(points, radius)
+    vis_graph = get_visibility_graph(points)
+
+    draw_visibility_graph(vis_graph, points, radius)
+
+
 
 if __name__ == '__main__':
     run()
