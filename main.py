@@ -2,6 +2,7 @@ import subprocess
 import PIL.ImageDraw as ImageDraw
 import PIL.Image as Image
 from shapely.geometry import LineString, Polygon
+import itertools
 
 def get_random_polygon(radius, max_size):
     compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp"], stdout=subprocess.PIPE)
@@ -56,8 +57,32 @@ def draw_visibility_graph(vis_graph, points, radius):
         for j in range(i+1, len(points)):
             if vis_graph[i][j]:
                 draw.line([points[i], points[j]], fill=(255,0,0,255))
+    
+    for i, point in enumerate(points):
+        draw.text((point[0],point[1]),str(i),fill=(255,255,255,255))
 
     image.show()
+
+def find_min_dominating_set(graph, totally=False):
+    nodes = set(range(len(graph)))
+    for m in range(1, len(graph)):
+        subsets = set(itertools.combinations(nodes, m))
+        for subset in subsets:
+            have_neigh = True
+            for i in range(len(graph)):
+                if not totally and i in subset:
+                    continue
+                node_have_neigh = False
+                for node in subset:
+                    if graph[node][i]:
+                        node_have_neigh = True
+                        break
+                if not node_have_neigh:
+                    have_neigh = False
+                    break
+            if have_neigh:
+                return m, subset
+    return len(graph)
 
 def run():
     radius = 200
@@ -66,6 +91,8 @@ def run():
     points = get_random_polygon(radius, max_size)
     
     vis_graph = get_visibility_graph(points)
+
+    print(find_min_dominating_set(vis_graph))
 
     draw_visibility_graph(vis_graph, points, radius)
 
