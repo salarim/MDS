@@ -6,20 +6,23 @@ import itertools
 import os
 import random
 
-def get_random_polygon(radius, max_size):
+def get_random_polygon(radius, max_size, rounds):
     if not os.path.isfile("random_poly.out"):
         compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp"], stdout=subprocess.PIPE)
         compile_out = compile_proc.communicate()
         if compile_out[0] or compile_out[1]:
             print(compile_out)
 
-    run_proc = subprocess.Popen(["./random_poly.out", str(radius), str(max_size)], stdout=subprocess.PIPE)
+    run_proc = subprocess.Popen(["./random_poly.out", str(radius), str(max_size), str(rounds)], stdout=subprocess.PIPE)
     run_out = run_proc.communicate()
 
-    cordinates = run_out[0].decode("utf-8").split(" ")[1:-1]
+    cordinates = run_out[0].decode("utf-8").split("\n")
+    cordinates = [x.split(" ")[1:-1] for x in cordinates]
     points = []
-    for i in range(0, len(cordinates), 2):
-        points.append((int(cordinates[i]) + radius, int(cordinates[i+1]) + radius))
+    for j in range(rounds):
+        points.append([])
+        for i in range(0, len(cordinates[j]), 2):
+            points[j].append((int(cordinates[j][i]) + radius, int(cordinates[j][i+1]) + radius))
 
     return points
 
@@ -98,6 +101,8 @@ def extract_max_new_degree(graph, k):
         for i, point2 in enumerate(point1):
             if point2 == 1:
                 neigh_degrees.append(new_degrees[i])
+            else:
+                neigh_degrees.append(0)
         sorted_inds = sorted(range(len(neigh_degrees)), key=lambda k: neigh_degrees[k])
         max_new_degrees.append(sorted_inds[-k:])
 
@@ -112,19 +117,69 @@ def first_approx_dominating_set(graph):
 
     return len(approx_dominant), list(approx_dominant)
 
+def find_min_vertex_cover(graph):
+    edges = []
+    nodes = set()
+    for i in range(len(graph)):
+        for j in range(i+1,len(graph)):
+            if graph[i][j] == 1:
+                edges.append((i,j))
+                nodes.add(i)
+                nodes.add(j)
+    
+    for m in range(1, len(nodes)):
+        subsets = set(itertools.combinations(nodes, m))
+        for subset in subsets:
+            cover = True
+            for edge in edges:
+                cover2 = False
+                for node in subset:
+                    if edge[0] == node or edge[1] == node:
+                        cover2 = True
+                        break
+                if not cover2:
+                    cover = False
+                    break
+            if cover:
+                return m, list(subset)
+
+    return len(nodes), list(nodes)
+
+def second_approx_dominating_set(graph):
+    edges = extract_max_new_degree(graph, 2)
+    new_graph = []
+    for i in range(len(graph)):
+        new_graph.append([])
+        for j in range(len(graph)):
+            new_graph[i].append(0)
+
+    for edge in edges:
+        new_graph[edge[0]][edge[1]] = 1
+        new_graph[edge[1]][edge[0]] = 1
+
+    return find_min_vertex_cover(new_graph)
+
 def run():
     radius = 200
-    max_size = 20
+    max_size = 30
+    rounds = 100
+    approx1, approx2 = 0.0, 0.0
 
-    points = get_random_polygon(radius, max_size)
+    point_sets = get_random_polygon(radius, max_size, rounds)
 
-    vis_graph = get_visibility_graph(points)
+    for points in point_sets:  
+        vis_graph = get_visibility_graph(points)
+        x1, _ = find_min_dominating_set(vis_graph, totally=True)
+        x2, _ = first_approx_dominating_set(vis_graph)
+        x3, _ = second_approx_dominating_set(vis_graph)
+        approx1 += (float)(x2) / x1
+        approx2 += (float)(x3) / x1
+        print(x1, x2, x3)
 
-    print(find_min_dominating_set(vis_graph))
+    approx1 /= rounds
+    approx2 /= rounds
+    print(approx1, approx2)
 
-    print(first_approx_dominating_set(vis_graph))
-    
-    draw_visibility_graph(vis_graph, points, radius)
 
 
 

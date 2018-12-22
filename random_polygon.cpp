@@ -23,7 +23,7 @@ typedef CGAL::Creator_uniform_2<int, Point_2>             Creator;
 typedef CGAL::Random_points_in_square_2<Point_2, Creator> Point_generator;
 int main(int argc, char** argv)
 {
-   if(argc < 3){
+   if(argc < 4){
       std::cout << "Not enough arguments" << std::endl;
       return 0;
    }
@@ -31,17 +31,21 @@ int main(int argc, char** argv)
    int MAX_POLY_SIZE; 
    sscanf(argv[1],"%lf", &RADIUS);
    MAX_POLY_SIZE = atoi(argv[2]);
+   int num = atoi(argv[3]);
 
-   Polygon_2            polygon;
-   std::list<Point_2>   point_set;
    CGAL::Random         rand;
+   
+    for(int i=0; i<num; i++){
+        Polygon_2            polygon;
+        std::list<Point_2>   point_set;
+        
+        int size = rand.get_int(4, MAX_POLY_SIZE);
+        CGAL::copy_n_unique(Point_generator(RADIUS), size,
+                            std::back_inserter(point_set));
 
-   int size = rand.get_int(4, MAX_POLY_SIZE);
-   CGAL::copy_n_unique(Point_generator(RADIUS), size,
-                       std::back_inserter(point_set));
-
-   CGAL::random_polygon_2(point_set.size(), std::back_inserter(polygon),
-                          point_set.begin());
-   std::cout << polygon;
+        CGAL::random_polygon_2(point_set.size(), std::back_inserter(polygon),
+                                point_set.begin());
+        std::cout << polygon << std::endl;
+    }
    return 0;
 }
