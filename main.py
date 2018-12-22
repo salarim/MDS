@@ -72,8 +72,7 @@ def draw_visibility_graph(vis_graph, points, radius):
 def find_min_dominating_set(graph, totally=False):
     nodes = set(range(len(graph)))
     for m in range(1, len(graph)):
-        subsets = set(itertools.combinations(nodes, m))
-        for subset in subsets:
+        for subset in itertools.combinations(nodes, m):
             have_neigh = True
             for i in range(len(graph)):
                 if not totally and i in subset:
@@ -128,8 +127,7 @@ def find_min_vertex_cover(graph):
                 nodes.add(j)
     
     for m in range(1, len(nodes)):
-        subsets = set(itertools.combinations(nodes, m))
-        for subset in subsets:
+        for subset in itertools.combinations(nodes, m):
             cover = True
             for edge in edges:
                 cover2 = False
@@ -161,7 +159,7 @@ def second_approx_dominating_set(graph):
 
 def run():
     radius = 200
-    max_size = 30
+    max_size = 40
     rounds = 100
     approx1, approx2 = 0.0, 0.0
 
