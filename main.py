@@ -4,6 +4,7 @@ import PIL.Image as Image
 from shapely.geometry import LineString, Polygon
 import itertools
 import os
+import random
 
 def get_random_polygon(radius, max_size):
     if not os.path.isfile("random_poly.out"):
@@ -83,8 +84,33 @@ def find_min_dominating_set(graph, totally=False):
                     have_neigh = False
                     break
             if have_neigh:
-                return m, subset
-    return len(graph)
+                return m, list(subset)
+    return len(graph), list(range(len(graph)))
+
+def extract_max_new_degree(graph, k):
+    rnds = [random.uniform(0, 1) for _ in range(len(graph))]
+    degrees = [sum(graph[i]) for i in range(len(graph))]
+    new_degrees = [x + y for x, y in zip(rnds, degrees)]
+
+    max_new_degrees = []
+    for point1 in graph:
+        neigh_degrees = []
+        for i, point2 in enumerate(point1):
+            if point2 == 1:
+                neigh_degrees.append(new_degrees[i])
+        sorted_inds = sorted(range(len(neigh_degrees)), key=lambda k: neigh_degrees[k])
+        max_new_degrees.append(sorted_inds[-k:])
+
+    return max_new_degrees
+
+def first_approx_dominating_set(graph):
+    nodes = extract_max_new_degree(graph, 1)
+
+    approx_dominant = set()
+    for node in nodes:
+        approx_dominant.add(node[0])
+
+    return len(approx_dominant), list(approx_dominant)
 
 def run():
     radius = 200
@@ -96,6 +122,8 @@ def run():
 
     print(find_min_dominating_set(vis_graph))
 
+    print(first_approx_dominating_set(vis_graph))
+    
     draw_visibility_graph(vis_graph, points, radius)
 
 
