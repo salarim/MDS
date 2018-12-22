@@ -3,12 +3,14 @@ import PIL.ImageDraw as ImageDraw
 import PIL.Image as Image
 from shapely.geometry import LineString, Polygon
 import itertools
+import os
 
 def get_random_polygon(radius, max_size):
-    compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp"], stdout=subprocess.PIPE)
-    compile_out = compile_proc.communicate()
-    if compile_out[0] or compile_out[1]:
-        print(compile_out)
+    if not os.path.isfile("random_poly.out"):
+        compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp"], stdout=subprocess.PIPE)
+        compile_out = compile_proc.communicate()
+        if compile_out[0] or compile_out[1]:
+            print(compile_out)
 
     run_proc = subprocess.Popen(["./random_poly.out", str(radius), str(max_size)], stdout=subprocess.PIPE)
     run_out = run_proc.communicate()
@@ -89,7 +91,7 @@ def run():
     max_size = 20
 
     points = get_random_polygon(radius, max_size)
-    
+
     vis_graph = get_visibility_graph(points)
 
     print(find_min_dominating_set(vis_graph))
