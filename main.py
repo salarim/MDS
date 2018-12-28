@@ -5,6 +5,9 @@ from shapely.geometry import LineString, Polygon
 import itertools
 import os
 import random
+import networkx as nx
+from networkx.algorithms.approximation.vertex_cover import min_weighted_vertex_cover
+import numpy as np
 
 def get_random_polygon(radius, max_size, rounds):
     if not os.path.isfile("random_poly.out"):
@@ -69,6 +72,10 @@ def draw_visibility_graph(vis_graph, points, radius):
 
     image.show()
 
+def create_networkx_graph(graph):
+    graph = np.matrix(graph)
+    return nx.from_numpy_matrix(graph)
+
 def find_min_dominating_set(graph, totally=False):
     nodes = set(range(len(graph)))
     for m in range(1, len(graph)):
@@ -88,6 +95,20 @@ def find_min_dominating_set(graph, totally=False):
             if have_neigh:
                 return m, list(subset)
     return len(graph), list(range(len(graph)))
+
+def find_approx_min_dominating_set(graph, totally=False):
+    check = np.ones(len(graph))
+    graph = np.array(graph)
+    ans = []
+    while sum(check) > 0:
+        ind = graph.dot(check).argmax()
+        neighs = graph[ind,:].nonzero()[0]
+        check[neighs] = 0
+        if not totally:
+            check[ind] = 0
+        ans.append(ind)
+    return len(ans), ans
+
 
 def extract_max_new_degree(graph, k):
     rnds = [random.uniform(0, 1) for _ in range(len(graph))]
@@ -155,19 +176,21 @@ def second_approx_dominating_set(graph):
         new_graph[edge[0]][edge[1]] = 1
         new_graph[edge[1]][edge[0]] = 1
 
-    return find_min_vertex_cover(new_graph)
+    new_graph = create_networkx_graph(new_graph)
+    vertext_cover = list(min_weighted_vertex_cover(new_graph))
+    return len(vertext_cover), vertext_cover
 
 def run():
     radius = 200
-    max_size = 40
-    rounds = 100
+    max_size = 300
+    rounds = 10
     approx1, approx2 = 0.0, 0.0
 
     point_sets = get_random_polygon(radius, max_size, rounds)
 
     for points in point_sets:  
         vis_graph = get_visibility_graph(points)
-        x1, _ = find_min_dominating_set(vis_graph, totally=True)
+        x1, _ = find_approx_min_dominating_set(vis_graph, totally=True)
         x2, _ = first_approx_dominating_set(vis_graph)
         x3, _ = second_approx_dominating_set(vis_graph)
         approx1 += (float)(x2) / x1
