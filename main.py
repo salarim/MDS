@@ -11,7 +11,7 @@ import numpy as np
 
 def get_random_polygon(radius, max_size, rounds):
     if not os.path.isfile("random_poly.out"):
-        compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp"], stdout=subprocess.PIPE)
+        compile_proc = subprocess.Popen(["g++", "random_polygon.cpp", "-o", "random_poly.out", "-lCGAL", "-lgmp", "-lboost_thread"], stdout=subprocess.PIPE)
         compile_out = compile_proc.communicate()
         if compile_out[0] or compile_out[1]:
             print(compile_out)
@@ -182,7 +182,7 @@ def second_approx_dominating_set(graph):
 
 def run():
     radius = 200
-    max_size = 300
+    max_size = 30
     rounds = 10
     approx1, approx2 = 0.0, 0.0
 
