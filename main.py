@@ -110,12 +110,13 @@ def find_approx_min_dominating_set(graph, totally=False):
     return len(ans), ans
 
 
-def extract_max_new_degree(graph, k):
+def extract_max_new_degree(graph, k=None):
     rnds = [random.uniform(0, 1) for _ in range(len(graph))]
     degrees = [sum(graph[i]) for i in range(len(graph))]
     new_degrees = [x + y for x, y in zip(rnds, degrees)]
 
     max_new_degrees = []
+    max_neigh_degrees = []
     for point1 in graph:
         neigh_degrees = []
         for i, point2 in enumerate(point1):
@@ -124,12 +125,17 @@ def extract_max_new_degree(graph, k):
             else:
                 neigh_degrees.append(0)
         sorted_inds = sorted(range(len(neigh_degrees)), key=lambda k: neigh_degrees[k])
-        max_new_degrees.append(sorted_inds[-k:])
+        if k is None:
+            max_new_degrees.append(sorted_inds)
+            max_neigh_degrees.append(sorted(neigh_degrees))
+        else:
+            max_new_degrees.append(sorted_inds[-k:])
+            max_neigh_degrees.append(sorted(neigh_degrees)[-k:])
 
-    return max_new_degrees
+    return max_new_degrees, max_neigh_degrees
 
 def first_approx_dominating_set(graph):
-    nodes = extract_max_new_degree(graph, 1)
+    nodes, _ = extract_max_new_degree(graph, 1)
 
     approx_dominant = set()
     for node in nodes:
@@ -165,7 +171,30 @@ def find_min_vertex_cover(graph):
     return len(nodes), list(nodes)
 
 def second_approx_dominating_set(graph):
-    edges = extract_max_new_degree(graph, 2)
+    edges, _ = extract_max_new_degree(graph, 2)
+    new_graph = []
+    for i in range(len(graph)):
+        new_graph.append([])
+        for j in range(len(graph)):
+            new_graph[i].append(0)
+
+    for edge in edges:
+        new_graph[edge[0]][edge[1]] = 1
+        new_graph[edge[1]][edge[0]] = 1
+
+    new_graph = create_networkx_graph(new_graph)
+    vertext_cover = list(min_weighted_vertex_cover(new_graph))
+    return len(vertext_cover), vertext_cover
+
+def third_approx_dominating_set(graph):
+    neigh_graph, probs = extract_max_new_degree(graph)
+    edges = []
+    for i in range(len(neigh_graph)):
+        s = sum(probs[i])
+        new_probs = [(float)(x) / s for x in probs[i]]
+        edge = list(np.random.choice(neigh_graph[i], 2, False, new_probs))
+        edges.append(edge)
+
     new_graph = []
     for i in range(len(graph)):
         new_graph.append([])
@@ -184,7 +213,7 @@ def run():
     radius = 200
     max_size = 30
     rounds = 10
-    approx1, approx2 = 0.0, 0.0
+    approx1, approx2, approx3 = 0.0, 0.0, 0.0
 
     point_sets = get_random_polygon(radius, max_size, rounds)
 
@@ -193,13 +222,16 @@ def run():
         x1, _ = find_approx_min_dominating_set(vis_graph, totally=True)
         x2, _ = first_approx_dominating_set(vis_graph)
         x3, _ = second_approx_dominating_set(vis_graph)
+        x4, _ = third_approx_dominating_set(vis_graph)
         approx1 += (float)(x2) / x1
         approx2 += (float)(x3) / x1
-        print(x1, x2, x3)
+        approx3 += (float)(x4) / x1
+        print(x1, x2, x3, x4)
 
     approx1 /= rounds
     approx2 /= rounds
-    print(approx1, approx2)
+    approx3 /= rounds
+    print(approx1, approx2, approx3)
 
 
 
