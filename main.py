@@ -178,9 +178,11 @@ def second_approx_dominating_set(graph):
         for j in range(len(graph)):
             new_graph[i].append(0)
 
-    for edge in edges:
-        new_graph[edge[0]][edge[1]] = 1
-        new_graph[edge[1]][edge[0]] = 1
+    for i, edge in enumerate(edges):
+        new_graph[i][edge[0]] = 1
+        new_graph[edge[0]][i] = 1
+        new_graph[i][edge[1]] = 1
+        new_graph[edge[1]][i] = 1
 
     new_graph = create_networkx_graph(new_graph)
     vertext_cover = list(min_weighted_vertex_cover(new_graph))
@@ -201,9 +203,11 @@ def third_approx_dominating_set(graph):
         for j in range(len(graph)):
             new_graph[i].append(0)
 
-    for edge in edges:
-        new_graph[edge[0]][edge[1]] = 1
-        new_graph[edge[1]][edge[0]] = 1
+    for i, edge in enumerate(edges):
+        new_graph[i][edge[0]] = 1
+        new_graph[edge[0]][i] = 1
+        new_graph[i][edge[1]] = 1
+        new_graph[edge[1]][i] = 1
 
     new_graph = create_networkx_graph(new_graph)
     vertext_cover = list(min_weighted_vertex_cover(new_graph))
@@ -219,6 +223,7 @@ def run():
 
     for points in point_sets:  
         vis_graph = get_visibility_graph(points)
+        # draw_visibility_graph(vis_graph, points, radius)
         x1, _ = find_approx_min_dominating_set(vis_graph, totally=True)
         x2, _ = first_approx_dominating_set(vis_graph)
         x3, _ = second_approx_dominating_set(vis_graph)
