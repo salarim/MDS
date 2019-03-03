@@ -188,55 +188,78 @@ def second_approx_dominating_set(graph):
     vertext_cover = list(min_weighted_vertex_cover(new_graph))
     return len(vertext_cover), vertext_cover
 
-def third_approx_dominating_set(graph):
+def third_approx_dominating_set(graph, repeat=[1]):
     neigh_graph, probs = extract_max_new_degree(graph)
-    edges = []
-    for i in range(len(neigh_graph)):
-        s = sum(probs[i])
-        new_probs = [(float)(x) / s for x in probs[i]]
-        edge = list(np.random.choice(neigh_graph[i], 2, False, new_probs))
-        edges.append(edge)
+    vertext_covers = []
+    
+    for r in repeat:
+        best_vertext_cover_len = np.Inf
+        best_vertext_cover = None
+        
+        for k in range(r):
+            edges = []
 
-    new_graph = []
-    for i in range(len(graph)):
-        new_graph.append([])
-        for j in range(len(graph)):
-            new_graph[i].append(0)
+            for i in range(len(neigh_graph)):
+                s = sum(probs[i])
+                new_probs = [(float)(x) / s for x in probs[i]]
+                edge = list(np.random.choice(neigh_graph[i], 2, False, new_probs))
+                edges.append(edge)
 
-    for i, edge in enumerate(edges):
-        new_graph[i][edge[0]] = 1
-        new_graph[edge[0]][i] = 1
-        new_graph[i][edge[1]] = 1
-        new_graph[edge[1]][i] = 1
+            new_graph = []
+            for i in range(len(graph)):
+                new_graph.append([])
+                for j in range(len(graph)):
+                    new_graph[i].append(0)
 
-    new_graph = create_networkx_graph(new_graph)
-    vertext_cover = list(min_weighted_vertex_cover(new_graph))
-    return len(vertext_cover), vertext_cover
+            for i, edge in enumerate(edges):
+                new_graph[i][edge[0]] = 1
+                new_graph[edge[0]][i] = 1
+                new_graph[i][edge[1]] = 1
+                new_graph[edge[1]][i] = 1
+
+            new_graph = create_networkx_graph(new_graph)
+            vertext_cover = list(min_weighted_vertex_cover(new_graph))
+
+            if len(vertext_cover) < best_vertext_cover_len:
+                best_vertext_cover_len = len(vertext_cover)
+                best_vertext_cover = vertext_cover
+
+        vertext_covers.append(best_vertext_cover)
+
+    return [len(v) for v in vertext_covers], vertext_covers
 
 def run():
     radius = 200
     max_size = 30
     rounds = 10
-    approx1, approx2, approx3 = 0.0, 0.0, 0.0
+    third_algorithm_repeat = 1
+    approxes = [0.0]*(2+third_algorithm_repeat)
 
     point_sets = get_random_polygon(radius, max_size, rounds)
 
     for points in point_sets:  
         vis_graph = get_visibility_graph(points)
         # draw_visibility_graph(vis_graph, points, radius)
+        results = []
         x1, _ = find_approx_min_dominating_set(vis_graph, totally=True)
+        results.append(x1)
         x2, _ = first_approx_dominating_set(vis_graph)
+        results.append(x2)
         x3, _ = second_approx_dominating_set(vis_graph)
-        x4, _ = third_approx_dominating_set(vis_graph)
-        approx1 += (float)(x2) / x1
-        approx2 += (float)(x3) / x1
-        approx3 += (float)(x4) / x1
-        print(x1, x2, x3, x4)
+        results.append(x3)
+        x4, _ = third_approx_dominating_set(vis_graph, [len(vis_graph)])
+        for x in x4:
+            results.append(x)
 
-    approx1 /= rounds
-    approx2 /= rounds
-    approx3 /= rounds
-    print(approx1, approx2, approx3)
+        approxes[0] += (float)(x2) / x1
+        approxes[1] += (float)(x3) / x1
+        for i, x in enumerate(x4):
+            approxes[i+2] += (float)(x) / x1
+        print(str(len(points)) + ':')
+        print(*results)
+
+    approxes = [a / rounds for a in approxes]
+    print(*approxes)
 
 
 
