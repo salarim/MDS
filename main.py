@@ -188,22 +188,30 @@ def second_approx_dominating_set(graph):
     vertext_cover = list(min_weighted_vertex_cover(new_graph))
     return len(vertext_cover), vertext_cover
 
+def choose_random(prob_matrix, items):
+    s = prob_matrix.cumsum(axis=0)
+    r = np.random.rand(prob_matrix.shape[1])
+    k = (s < r).sum(axis=0)
+    result = []
+    for i, x in enumerate(k):
+        result.append(items[x][i])
+    return result
+
 def third_approx_dominating_set(graph, repeat=[1]):
     neigh_graph, probs = extract_max_new_degree(graph)
     vertext_covers = []
+    new_probs = []
+    for prob in probs:
+        s = sum(prob)
+        new_probs.append([(float)(x) / s for x in prob])
     
     for r in repeat:
         best_vertext_cover_len = np.Inf
         best_vertext_cover = None
         
         for k in range(r):
-            edges = []
-
-            for i in range(len(neigh_graph)):
-                s = sum(probs[i])
-                new_probs = [(float)(x) / s for x in probs[i]]
-                edge = list(np.random.choice(neigh_graph[i], 2, False, new_probs))
-                edges.append(edge)
+            edges1 = choose_random(np.array(new_probs).T, np.array(neigh_graph).T)
+            edges2 = choose_random(np.array(new_probs).T, np.array(neigh_graph).T)
 
             new_graph = []
             for i in range(len(graph)):
@@ -211,11 +219,12 @@ def third_approx_dominating_set(graph, repeat=[1]):
                 for j in range(len(graph)):
                     new_graph[i].append(0)
 
-            for i, edge in enumerate(edges):
-                new_graph[i][edge[0]] = 1
-                new_graph[edge[0]][i] = 1
-                new_graph[i][edge[1]] = 1
-                new_graph[edge[1]][i] = 1
+            for i, edge in enumerate(edges1):
+                new_graph[i][edge] = 1
+                new_graph[edge][i] = 1
+            for i, edge in enumerate(edges2):
+                new_graph[i][edge] = 1
+                new_graph[edge][i] = 1
 
             new_graph = create_networkx_graph(new_graph)
             vertext_cover = list(min_weighted_vertex_cover(new_graph))
@@ -247,7 +256,7 @@ def run():
         results.append(x2)
         x3, _ = second_approx_dominating_set(vis_graph)
         results.append(x3)
-        x4, _ = third_approx_dominating_set(vis_graph, [len(vis_graph)])
+        x4, _ = third_approx_dominating_set(vis_graph, [len(vis_graph)**2])
         for x in x4:
             results.append(x)
 
