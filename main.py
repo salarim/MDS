@@ -193,25 +193,36 @@ def choose_random(prob_matrix, items):
     r = np.random.rand(prob_matrix.shape[1])
     k = (s < r).sum(axis=0)
     result = []
+    new_probs = []
+    new_items = []
+    inverse_probs = prob_matrix.T
+    inverse_items = items.T
     for i, x in enumerate(k):
         result.append(items[x][i])
-    return result
+        new_probs.append(np.delete(inverse_probs[i], x))
+        new_items.append(np.delete(inverse_items[i], x))
+    return result, np.array(new_items), np.array(new_probs)
 
-def third_approx_dominating_set(graph, repeat=[1]):
-    neigh_graph, probs = extract_max_new_degree(graph)
-    vertext_covers = []
+def normalize(probs):
     new_probs = []
     for prob in probs:
         s = sum(prob)
         new_probs.append([(float)(x) / s for x in prob])
+    return new_probs
+
+def third_approx_dominating_set(graph, repeat=[1]):
+    neigh_graph, probs = extract_max_new_degree(graph)
+    vertext_covers = []
+    new_probs = normalize(probs)
     
     for r in repeat:
         best_vertext_cover_len = np.Inf
         best_vertext_cover = None
         
         for k in range(r):
-            edges1 = choose_random(np.array(new_probs).T, np.array(neigh_graph).T)
-            edges2 = choose_random(np.array(new_probs).T, np.array(neigh_graph).T)
+            edges1, new_i, new_p = choose_random(np.array(new_probs).T, np.array(neigh_graph).T)
+            new_p = np.array(normalize(new_p))
+            edges2, _, _ = choose_random(new_p.T, new_i.T)
 
             new_graph = []
             for i in range(len(graph)):
