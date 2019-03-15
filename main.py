@@ -180,10 +180,8 @@ def second_approx_dominating_set(graph, rnds=None):
             new_graph[i].append(0)
 
     for i, edge in enumerate(edges):
-        new_graph[i][edge[0]] = 1
-        new_graph[edge[0]][i] = 1
-        new_graph[i][edge[1]] = 1
-        new_graph[edge[1]][i] = 1
+        new_graph[edge[0]][edge[1]] = 1
+        new_graph[edge[1]][edge[0]] = 1
 
     new_graph = create_networkx_graph(new_graph)
     vertext_cover = list(min_weighted_vertex_cover(new_graph))
@@ -231,12 +229,9 @@ def third_approx_dominating_set(graph, repeat=[1], rnds=None):
                 for j in range(len(graph)):
                     new_graph[i].append(0)
 
-            for i, edge in enumerate(edges1):
-                new_graph[i][edge] = 1
-                new_graph[edge][i] = 1
-            for i, edge in enumerate(edges2):
-                new_graph[i][edge] = 1
-                new_graph[edge][i] = 1
+            for i in range(len(edges1)):
+                new_graph[edges1[i]][edges2[i]] = 1
+                new_graph[edges2[i]][edges1[i]] = 1
 
             new_graph = create_networkx_graph(new_graph)
             vertext_cover = list(min_weighted_vertex_cover(new_graph))
