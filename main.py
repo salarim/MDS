@@ -110,8 +110,9 @@ def find_approx_min_dominating_set(graph, totally=False):
     return len(ans), ans
 
 
-def extract_max_new_degree(graph, k=None):
-    rnds = [random.uniform(0, 1) for _ in range(len(graph))]
+def extract_max_new_degree(graph, k=None, rnds=None):
+    if not rnds:
+        rnds = [random.uniform(0, 1) for _ in range(len(graph))]
     degrees = [sum(graph[i]) for i in range(len(graph))]
     new_degrees = [x + y for x, y in zip(rnds, degrees)]
 
@@ -134,8 +135,8 @@ def extract_max_new_degree(graph, k=None):
 
     return max_new_degrees, max_neigh_degrees
 
-def first_approx_dominating_set(graph):
-    nodes, _ = extract_max_new_degree(graph, 1)
+def first_approx_dominating_set(graph, rnds=None):
+    nodes, _ = extract_max_new_degree(graph, 1, rnds)
 
     approx_dominant = set()
     for node in nodes:
@@ -170,8 +171,8 @@ def find_min_vertex_cover(graph):
 
     return len(nodes), list(nodes)
 
-def second_approx_dominating_set(graph):
-    edges, _ = extract_max_new_degree(graph, 2)
+def second_approx_dominating_set(graph, rnds=None):
+    edges, _ = extract_max_new_degree(graph, 2, rnds)
     new_graph = []
     for i in range(len(graph)):
         new_graph.append([])
@@ -210,8 +211,8 @@ def normalize(probs):
         new_probs.append([(float)(x) / s for x in prob])
     return new_probs
 
-def third_approx_dominating_set(graph, repeat=[1]):
-    neigh_graph, probs = extract_max_new_degree(graph)
+def third_approx_dominating_set(graph, repeat=[1], rnds=None):
+    neigh_graph, probs = extract_max_new_degree(graph, rnds=rnds)
     vertext_covers = []
     new_probs = normalize(probs)
     
@@ -249,7 +250,7 @@ def third_approx_dominating_set(graph, repeat=[1]):
     return [len(v) for v in vertext_covers], vertext_covers
 
 def run():
-    radius = 200
+    radius = 400
     max_size = 30
     rounds = 10
     third_algorithm_repeat = 1
@@ -261,13 +262,14 @@ def run():
         vis_graph = get_visibility_graph(points)
         # draw_visibility_graph(vis_graph, points, radius)
         results = []
+        rnds = [random.uniform(0, 1) for _ in range(len(vis_graph))]
         x1, _ = find_approx_min_dominating_set(vis_graph, totally=True)
         results.append(x1)
-        x2, _ = first_approx_dominating_set(vis_graph)
+        x2, _ = first_approx_dominating_set(vis_graph, rnds)
         results.append(x2)
-        x3, _ = second_approx_dominating_set(vis_graph)
+        x3, _ = second_approx_dominating_set(vis_graph, rnds)
         results.append(x3)
-        x4, _ = third_approx_dominating_set(vis_graph, [len(vis_graph)**2])
+        x4, _ = third_approx_dominating_set(vis_graph, [len(vis_graph)], rnds)
         for x in x4:
             results.append(x)
 
