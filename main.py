@@ -244,12 +244,49 @@ def third_approx_dominating_set(graph, repeat=[1], rnds=None):
 
     return [len(v) for v in vertext_covers], vertext_covers
 
+def forth_approx_dominating_set(graph, rnds=None):
+    dom_len, dom_set = find_approx_min_dominating_set(graph, totally=True)
+    dom_sub_graph = []
+
+    for i in range(len(graph)):
+        dom_sub_graph.append([])
+        for j in range(len(graph)):
+            dom_sub_graph[i].append(0)
+    
+    for v in dom_set:
+        for i in range(len(graph)):
+            if graph[i][v]:
+                dom_sub_graph[i][v] = 1
+                dom_sub_graph[v][i] = 1
+
+    dominants, _ = extract_max_new_degree(dom_sub_graph, 1, rnds=rnds)
+    max_neighs, _ = extract_max_new_degree(graph, 2, rnds=rnds)
+
+    new_graph = []
+
+    for i in range(len(graph)):
+        new_graph.append([])
+        for j in range(len(graph)):
+            new_graph[i].append(0)
+
+    for i in range(len(graph)):
+        neigh1 = dominants[i][0]
+        neigh2 = max_neighs[i][0]
+        if neigh1 == neigh2:
+            neigh2 = max_neighs[i][1]
+        new_graph[neigh1][neigh2] = 1
+        new_graph[neigh2][neigh1] = 1
+
+    new_graph = create_networkx_graph(new_graph)
+    vertext_cover = list(min_weighted_vertex_cover(new_graph))
+    return len(vertext_cover), vertext_cover
+
 def run():
     radius = 400
     max_size = 30
     rounds = 10
     third_algorithm_repeat = 1
-    approxes = [0.0]*(2+third_algorithm_repeat)
+    approxes = [0.0]*(2+third_algorithm_repeat+1)
 
     point_sets = get_random_polygon(radius, max_size, rounds)
 
@@ -267,11 +304,14 @@ def run():
         x4, _ = third_approx_dominating_set(vis_graph, [len(vis_graph)], rnds)
         for x in x4:
             results.append(x)
+        x5, _ = forth_approx_dominating_set(vis_graph, rnds)
+        results.append(x5)
 
         approxes[0] += (float)(x2) / x1
         approxes[1] += (float)(x3) / x1
         for i, x in enumerate(x4):
             approxes[i+2] += (float)(x) / x1
+        approxes[2+third_algorithm_repeat] += (float)(x5) / x1 
         print(str(len(points)) + ':')
         print(*results)
 
