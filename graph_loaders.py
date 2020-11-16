@@ -12,46 +12,48 @@ from shapely.geometry import LineString, Polygon
 
 class MtxGraphLoader:
 
-    def __init__(self, url):
+    def __init__(self, url, base_path='data'):
         self.url = url
         self.name = '.'.join(url.split('/')[-1].split('.')[:-1])
+        self.base_path = base_path
 
-        if not os.path.exists(self.name):
+        if not os.path.exists(os.path.join(self.base_path, self.name)):
             self.download()
 
     def download(self):
-        os.mkdir(self.name)
+        os.mkdir(os.path.join(self.base_path, self.name))
 
-        zipfile_path = os.path.join(self.name, self.name + '.zip')
+        zipfile_path = os.path.join(self.base_path, self.name, self.name + '.zip')
         urllib.request.urlretrieve(self.url, zipfile_path)
 
         with zipfile.ZipFile(zipfile_path, 'r') as zip_ref:
-            zip_ref.extractall(self.name)
+            zip_ref.extractall(os.path.join(self.base_path, self.name))
 
         os.remove(zipfile_path)
 
     def get_adj_matrix(self):
-        adj_matrix = mmread(os.path.join(self.name, self.name + '.mtx'))
+        adj_matrix = mmread(os.path.join(self.base_path, self.name, self.name + '.mtx'))
         return adj_matrix.toarray()
 
     def clean(self):
-        shutil.rmtree(self.name)
+        shutil.rmtree(os.path.join(self.base_path, self.name))
 
 
 class TxtGraphLoader:
 
-    def __init__(self, url):
+    def __init__(self, url, base_path='data'):
         self.url = url
         self.name = '.'.join(url.split('/')[-1].split('.')[:-2])
+        self.base_path = base_path
 
-        if not os.path.exists(self.name):
+        if not os.path.exists(os.path.join(self.base_path, self.name)):
             self.download()
 
     def download(self):
-        os.mkdir(self.name)
+        os.mkdir(os.path.join(self.base_path, self.name))
 
-        zipfile_path = os.path.join(self.name, self.name + '.txt.gz')
-        txtfile_path = os.path.join(self.name, self.name + '.txt')
+        zipfile_path = os.path.join(self.base_path, self.name, self.name + '.txt.gz')
+        txtfile_path = os.path.join(self.base_path, self.name, self.name + '.txt')
         urllib.request.urlretrieve(self.url, zipfile_path)
 
         with gzip.open(zipfile_path, 'rb') as f_in:
@@ -61,7 +63,7 @@ class TxtGraphLoader:
         os.remove(zipfile_path)
 
     def get_adj_matrix(self):
-        txtfile_path = os.path.join(self.name, self.name + '.txt')
+        txtfile_path = os.path.join(self.base_path, self.name, self.name + '.txt')
 
         ids = set()
         with open(txtfile_path) as f: 
@@ -87,34 +89,35 @@ class TxtGraphLoader:
         return adj_matrix
     
     def clean(self):
-        shutil.rmtree(self.name)
+        shutil.rmtree(os.path.join(self.base_path, self.name))
 
 
 class DatGraphLoader:
 
-    def __init__(self, name, url, index):
+    def __init__(self, name, url, index, base_path='data'):
         self.url = url
         self.name = name
         self.index = index
+        self.base_path = base_path
 
-        if not os.path.exists('T1'):
+        if not os.path.exists(os.path.join(self.base_path, 'T1')):
             self.download()
 
     def download(self):
-        zipfile_path = 'ProblemInstances.zip'
+        zipfile_path = os.path.join(self.base_path, 'ProblemInstances.zip')
         urllib.request.urlretrieve(self.url, zipfile_path)
 
         with zipfile.ZipFile(zipfile_path, 'r') as zip_ref:
-            zip_ref.extractall('.')
+            zip_ref.extractall(self.base_path)
 
         os.remove(zipfile_path)
-        shutil.rmtree('T2')
+        shutil.rmtree(os.path.join(self.base_path, 'T2'))
 
     def get_adj_matrix(self):
         v_nb = self.name[self.name.index('V')+1:self.name.index('E')]
         e_nb = self.name[self.name.index('E')+1:]
         file_name = 'Problem.dat_' + v_nb + '_' + e_nb + '_' + str(self.index)
-        file_path = os.path.join('T1', self.name, str(self.index), 'Test', file_name)
+        file_path = os.path.join(self.base_path, 'T1', self.name, str(self.index), 'Test', file_name)
 
         start_line = 2 * int(v_nb) + 5
         adj_matrix = np.zeros((int(v_nb), int(v_nb)))
@@ -129,7 +132,7 @@ class DatGraphLoader:
         return adj_matrix
 
     def clean(self):
-        shutil.rmtree('T1')
+        shutil.rmtree(os.path.join(self.base_path, 'T1'))
 
 
 def get_random_polygon(radius, max_size, rounds):

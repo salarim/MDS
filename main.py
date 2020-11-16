@@ -14,6 +14,8 @@ from methods import find_approx_min_dominating_set, \
 
 
 def main():
+    # loader = MtxGraphLoader('http://nrvis.com/download/data/bhoslib/frb40-19-1.zip')
+    # loader = TxtGraphLoader('http://snap.stanford.edu/data/cit-HepTh.txt.gz')
     loader = DatGraphLoader('V100E1000', 'http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip', 0)
     adj_matrix = loader.get_adj_matrix()
     loader.clean()
