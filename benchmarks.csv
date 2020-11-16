@@ -1,0 +1,142 @@
+instance,url,format
+frb40-19-1,http://nrvis.com/download/data/bhoslib/frb40-19-1.zip,mtx
+frb40-19-2,http://nrvis.com/download/data/bhoslib/frb40-19-2.zip,mtx
+frb40-19-3,http://nrvis.com/download/data/bhoslib/frb40-19-3.zip,mtx
+frb40-19-4,http://nrvis.com/download/data/bhoslib/frb40-19-4.zip,mtx
+frb40-19-5,http://nrvis.com/download/data/bhoslib/frb40-19-5.zip,mtx
+frb45-21-1,http://nrvis.com/download/data/bhoslib/frb45-21-1.zip,mtx
+frb45-21-2,http://nrvis.com/download/data/bhoslib/frb45-21-2.zip,mtx
+frb45-21-3,http://nrvis.com/download/data/bhoslib/frb45-21-3.zip,mtx
+frb45-21-4,http://nrvis.com/download/data/bhoslib/frb45-21-4.zip,mtx
+frb45-21-5,http://nrvis.com/download/data/bhoslib/frb45-21-5.zip,mtx
+frb50-23-1,http://nrvis.com/download/data/bhoslib/frb50-23-1.zip,mtx
+frb50-23-2,http://nrvis.com/download/data/bhoslib/frb50-23-2.zip,mtx
+frb50-23-3,http://nrvis.com/download/data/bhoslib/frb50-23-3.zip,mtx
+soc-youtube(V496 E2M),http://nrvis.com/download/data/soc/soc-youtube.zip,mtx
+soc-flickr(V514K E3M),http://nrvis.com/download/data/soc/soc-flickr.zip,mtx
+ca-coauthors-dblp(V540K E15M),http://nrvis.com/download/data/ca/ca-coauthors-dblp.zip,mtx
+ca-dblp-2012(V317K E1M),http://nrvis.com/download/data/ca/ca-dblp-2012.zip,mtx
+ca-hollywood-2009(V1.1 E56.3),http://nrvis.com/download/data/ca/ca-hollywood-2009.zip,mtx
+inf-roadNet-CA(V2M E3M),http://nrvis.com/download/data/inf/inf-roadNet-CA.zip,mtx
+inf-roadNet-PA(V1M E2M),http://nrvis.com/download/data/inf/inf-roadNet-PA.zip,mtx
+rt-retweet-crawl(V1M E2M),http://nrvis.com/download/data/rt/rt-retweet-crawl.zip,mtx
+sc-ldoor(V952k E21M),http://nrvis.com/download/data/sc/sc-ldoor.zip,mtx
+sc-pwtk(V218K E6M),http://nrvis.com/download/data/sc/sc-pwtk.zip,mtx
+sc-shipsec1(V140K E2M),http://nrvis.com/download/data/sc/sc-shipsec1.zip,mtx
+sc-shipsec5(V179K E2M),http://nrvis.com/download/data/sc/sc-shipsec5.zip,mtx
+soc-FourSquare(V639K E3M),http://nrvis.com/download/data/soc/soc-FourSquare.zip,mtx
+soc-buzznet(V101K E3M),http://nrvis.com/download/data/soc/soc-buzznet.zip,mtx
+soc-delicious(V536K E1M),http://nrvis.com/download/data/soc/soc-delicious.zip,mtx
+soc-digg(V771K E6M),http://nrvis.com/download/data/soc/soc-digg.zip,mtx
+soc-flixster(V3M E8M),http://nrvis.com/download/data/soc/soc-flixster.zip,mtx
+soc-lastfm(V1M E5M),http://nrvis.com/download/data/soc/soc-lastfm.zip,mtx
+soc-livejournal(V4M E28M),http://nrvis.com/download/data/soc/soc-livejournal.zip,mtx
+soc-orkut(V3M E106M),http://nrvis.com/download/data/soc/soc-orkut.zip,mtx
+soc-orkut-dir(V3M E117M),http://nrvis.com/download/data/soc/soc-orkut-dir.zip,mtx
+soc-pokec(V2M E22M),http://nrvis.com/download/data/soc/soc-pokec.zip,mtx
+soc-youtube-snap(V1M E3M),http://nrvis.com/download/data/soc/soc-youtube-snap.zip,mtx
+socfb-FSU53(V28K E1M),http://nrvis.com/download/data/socfb/socfb-FSU53.zip,mtx
+socfb-Indiana69(V30K E1M),http://nrvis.com/download/data/socfb/socfb-Indiana69.zip,mtx
+socfb-MSU24(V32K E1M),http://nrvis.com/download/data/socfb/socfb-MSU24.zip,mtx
+socfb-Michigan23(V30K E1M),http://nrvis.com/download/data/socfb/socfb-Michigan23.zip,mtx
+socfb-Penn94(V42K E1M),http://nrvis.com/download/data/socfb/socfb-Penn94.zip,mtx
+socfb-Texas80(V32K E1M),http://nrvis.com/download/data/socfb/socfb-Texas80.zip,mtx
+socfb-Texas84(V36K E2M),http://nrvis.com/download/data/socfb/socfb-Texas84.zip,mtx
+rec-epinions(V755K E13M),http://nrvis.com/download/data/rec/rec-epinions.zip,mtx
+soc-dogster(V427K E9M),http://nrvis.com/download/data/soc/soc-dogster.zip,mtx
+sc-rel9(V6M E24M),http://nrvis.com/download/data/sc/sc-rel9.zip,mtx
+rec-libimset-dir(V221K E17M),http://nrvis.com/download/data/rec/rec-libimseti-dir.zip,mtx
+web-EPA,http://nrvis.com/download/data/web/web-EPA.zip,mtx
+web-edu,http://nrvis.com/download/data/web/web-edu.zip,mtx
+web-polblogs,http://nrvis.com/download/data/web/web-polblogs.zip,mtx
+web-spam,http://nrvis.com/download/data/web/web-spam.zip,mtx
+web-frwikinews-user-edits,http://nrvis.com/download/data/web/web-frwikinews-user-edits.zip,mtx
+web-indochina-2004,http://nrvis.com/download/data/web/web-indochina-2004.zip,mtx
+web-webbase-2001,http://nrvis.com/download/data/web/web-webbase-2001.zip,mtx
+web-sk-2005,http://nrvis.com/download/data/web/web-sk-2005.zip,mtx
+web-uk-2005,http://nrvis.com/download/data/web/web-uk-2005.zip,mtx
+web-arabic-2005,http://nrvis.com/download/data/web/web-arabic-2005.zip,mtx
+web-Stanford,http://nrvis.com/download/data/web/web-Stanford.zip,mtx
+web-NotreDame,http://nrvis.com/download/data/web/web-NotreDame.zip,mtx
+web-BerkStan-dir,http://nrvis.com/download/data/web/web-BerkStan-dir.zip,mtx
+web-it-2004,http://nrvis.com/download/data/web/web-it-2004.zip,mtx
+web-italycnr-2000,http://nrvis.com/download/data/web/web-italycnr-2000.zip,mtx
+Amazon0302(V262K E1.2M),http://nrvis.com/download/data/misc/amazon0302.zip,mtx
+Amazon0312(V400K E3.2M),http://nrvis.com/download/data/misc/amazon0312.zip,mtx
+Amazon0505(V410K E3.3M),http://nrvis.com/download/data/misc/amazon0505.zip,mtx
+Amazon0601(V403K E3.3M),http://nrvis.com/download/data/misc/amazon0601.zip,mtx
+email-EuAll(V265K E420K),http://nrvis.com/download/data/misc/email-EuAll.zip,mtx
+p2p-Gnutella24(V26K E65K),http://nrvis.com/download/data/misc/p2p-Gnutella24.zip,mtx
+p2p-Gnutella25(V22K E54K),http://nrvis.com/download/data/misc/p2p-Gnutella25.zip,mtx
+p2p-Gnutella30(V36K E88K),http://nrvis.com/download/data/misc/p2p-Gnutella30.zip,mtx
+p2p-Gnutella31(V62K E147K),http://nrvis.com/download/data/misc/p2p-Gnutella31.zip,mtx
+soc-sign-Slashdot081106(V77K E516K),http://nrvis.com/download/data/soc/soc-sign-Slashdot081106.zip,mtx
+soc-sign-Slashdot090216(V81K E545K),http://nrvis.com/download/data/soc/soc-sign-Slashdot090216.zip,mtx
+soc-sign-Slashdot090221(V82K E549K),http://nrvis.com/download/data/soc/soc-sign-Slashdot090221.zip,mtx
+soc-Epinions1(V75K E508K),http://nrvis.com/download/data/dimacs10/soc-Epinions1.zip,mtx
+web-BerkStan(V685K E7.6M),http://nrvis.com/download/data/web/web-BerkStan.zip,mtx
+web-Stanford(V281K E2.3M),http://nrvis.com/download/data/web/web-Stanford.zip,mtx
+wiki-Talk(V2.3M E5M),http://snap.stanford.edu/data/wiki-Talk.txt.gz,txt
+web-NotreDame(V325K E1.5M),http://nrvis.com/download/data/web/web-NotreDame.zip,mtx
+wiki-Vote(V7K E103K),http://snap.stanford.edu/data/wiki-Vote.txt.gz,txt
+cit-HepPh(V34K E421K),http://snap.stanford.edu/data/cit-HepPh.txt.gz,txt
+cit-HepTh(V27K E352K),http://snap.stanford.edu/data/cit-HepTh.txt.gz,txt
+rgg-n-2-17-s0,http://nrvis.com/download/data/dimacs10/rgg_n_2_17_s0.zip,mtx
+rgg-n-2-19-s0,http://nrvis.com/download/data/dimacs10/rgg_n_2_19_s0.zip,mtx
+rgg-n-2-20-s0,http://nrvis.com/download/data/dimacs10/rgg_n_2_20_s0.zip,mtx
+rgg-n-2-21-s0,http://nrvis.com/download/data/dimacs10/rgg_n_2_21_s0.zip,mtx
+rgg-n-2-22-s0,http://nrvis.com/download/data/dimacs10/rgg_n_2_22_s0.zip,mtx
+rgg-n-2-23-s0,http://nrvis.com/download/data/dimacs10/rgg_n_2_23_s0.zip,mtx
+citationCiteseer,http://nrvis.com/download/data/dimacs10/citationCiteseer.zip,mtx
+coAuthorsCiteseer,http://nrvis.com/download/data/dimacs10/coAuthorsCiteseer.zip,mtx
+co-papers-citeseer,http://nrvis.com/download/data/dimacs10/co-papers-citeseer.zip,mtx
+kron-g500-logn16,http://nrvis.com/download/data/dimacs10/kron_g500-logn16.zip,mtx
+co-papers-dblp,http://nrvis.com/download/data/dimacs10/co-papers-dblp.zip,mtx
+V100E100,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V100E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V100E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V100E250,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V100E500,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V100E750,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E150,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E250,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E3000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E500,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V150E750,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V200E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V200E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V200E250,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V200E3000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V200E500,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V200E750,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E250,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E3000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E500,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E5000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V250E750,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E300,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E3000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E500,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E5000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V300E750,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V500E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V500E10000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V500E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V500E500,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V500E5000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V800E100,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V800E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V800E10000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V800E2000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V800E5000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V1000E1000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V1000E10000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V1000E15000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V1000E20000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
+V1000E5000,http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip,dat
