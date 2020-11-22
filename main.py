@@ -1,14 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from graph_loaders import get_random_polygon, get_visibility_graph, \
-                          MtxGraphLoader, TxtGraphLoader, DatGraphLoader
-from methods import find_approx_min_dominating_set, \
-                    first_approx_dominating_set, \
-                    second_approx_dominating_set, \
-                    third_approx_dominating_set, \
-                    forth_approx_dominating_set, \
-                    find_mds_iterative, \
+from graph_loaders import MtxGraphLoader, TxtGraphLoader, DatGraphLoader
+from methods import find_mds_iterative, \
                     find_mds_max_degree_count, \
                     find_mds_max_count_seprate_neigh
                         
@@ -23,6 +17,8 @@ def main():
             loader = TxtGraphLoader(row['url'])
         elif row['format'] == 'dat':
             loader = DatGraphLoader(row['instance'], row['url'])
+        else:
+            continue
         
         adj_matrix = loader.get_adj_matrix()
 
