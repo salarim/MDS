@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from graph_loaders import get_random_polygon, get_visibility_graph, \
                           MtxGraphLoader, TxtGraphLoader, DatGraphLoader
@@ -14,17 +15,29 @@ from methods import find_approx_min_dominating_set, \
 
 
 def main():
-    # loader = MtxGraphLoader('http://nrvis.com/download/data/bhoslib/frb40-19-1.zip')
-    # loader = TxtGraphLoader('http://snap.stanford.edu/data/cit-HepTh.txt.gz')
-    loader = DatGraphLoader('V100E1000', 'http://mail.ipb.ac.rs/~rakaj/home/ProblemInstances.zip', 0)
-    adj_matrix = loader.get_adj_matrix()
-    loader.clean()
+    benchmarks = pd.read_csv('benchmarks.csv')
+    for index, row in benchmarks.iterrows():
+        if row['format'] == 'mtx':
+            loader = MtxGraphLoader(row['url'])
+        elif row['format'] == 'txt':
+            loader = TxtGraphLoader(row['url'])
+        elif row['format'] == 'dat':
+            loader = DatGraphLoader(row['instance'], row['url'])
+        
+        adj_matrix = loader.get_adj_matrix()
+        print(row['instance'], adj_matrix.shape)
 
-    rnds = np.random.rand(adj_matrix.shape[0])
-
-    sol = find_mds_iterative(adj_matrix, 5, rnds)
-
-    print(len(sol))
+        sol = []
+        try:
+            sol.append(len(find_mds_iterative(adj_matrix, 5, rnds)))
+            sol.append(len(find_mds_max_degree_count(adj_matrix, 5, rnds)))
+            sol.append(len(find_mds_max_count_seprate_neigh(adj_matrix, 5, rnds)))
+        except Exception e:
+            print(e)
+        
+        print(sol)
+        if row['format'] != 'dat' and index != len(benchmarks.index)-1:
+            loader.clean()
 
 if __name__ == '__main__':
     main()
