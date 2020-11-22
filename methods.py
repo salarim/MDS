@@ -2,6 +2,7 @@ import itertools
 
 import numpy as np
 from scipy.sparse import csr_matrix
+import networkx as nx
 from networkx.algorithms.approximation.vertex_cover import min_weighted_vertex_cover
 
 from utils import create_networkx_graph, extract_max_new_degree, choose_random, normalize
