@@ -28,11 +28,12 @@ def main():
         print(row['instance'], adj_matrix.shape)
 
         sol = []
+        rnds = np.random.rand(adj_matrix.shape[0])
         try:
             sol.append(len(find_mds_iterative(adj_matrix, 5, rnds)))
             sol.append(len(find_mds_max_degree_count(adj_matrix, 5, rnds)))
             sol.append(len(find_mds_max_count_seprate_neigh(adj_matrix, 5, rnds)))
-        except Exception e:
+        except Exception as e:
             print(e)
         
         print(sol)
