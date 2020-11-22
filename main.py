@@ -25,7 +25,6 @@ def main():
             loader = DatGraphLoader(row['instance'], row['url'])
         
         adj_matrix = loader.get_adj_matrix()
-        print(row['instance'], adj_matrix.shape)
 
         sol = []
         rnds = np.random.rand(adj_matrix.shape[0])
@@ -36,7 +35,7 @@ def main():
         except Exception as e:
             print(e)
         
-        print(sol)
+        print(row['instance'], adj_matrix.shape, sol)
         if row['format'] != 'dat' and index != len(benchmarks.index)-1:
             loader.clean()
 
