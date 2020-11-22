@@ -32,7 +32,7 @@ soc-flixster(V3M E8M),http://nrvis.com/download/data/soc/soc-flixster.zip,mtx
 soc-lastfm(V1M E5M),http://nrvis.com/download/data/soc/soc-lastfm.zip,mtx
 soc-livejournal(V4M E28M),http://nrvis.com/download/data/soc/soc-livejournal.zip,mtx
 soc-orkut(V3M E106M),http://nrvis.com/download/data/soc/soc-orkut.zip,mtx
-soc-orkut-dir(V3M E117M),http://nrvis.com/download/data/soc/soc-orkut-dir.zip,mtx
+soc-orkut-dir(V3M E117M),http://nrvis.com/download/data/soc/soc-orkut-dir.zip,edges
 soc-pokec(V2M E22M),http://nrvis.com/download/data/soc/soc-pokec.zip,mtx
 soc-youtube-snap(V1M E3M),http://nrvis.com/download/data/soc/soc-youtube-snap.zip,mtx
 socfb-FSU53(V28K E1M),http://nrvis.com/download/data/socfb/socfb-FSU53.zip,mtx
