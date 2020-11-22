@@ -1,18 +1,19 @@
 import itertools
 
 import numpy as np
+from scipy.sparse import csr_matrix
 from networkx.algorithms.approximation.vertex_cover import min_weighted_vertex_cover
 
 from utils import create_networkx_graph, extract_max_new_degree, choose_random, normalize
 
 
 def find_mds_iterative(adj_matrix, nb_iters, rnds):
-    degrees = adj_matrix.sum(axis=1)
+    degrees = adj_matrix.sum(axis=1).A1
     weights = degrees + rnds
 
-    neigh_weights = adj_matrix * np.transpose([weights])
-    max_neighs = neigh_weights.argmax(axis=0)
-
+    neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+    max_neighs = neigh_weights.argmax(axis=0).A1
+    
     for iter in range(nb_iters):
         max_idxs, counts = np.unique(max_neighs, return_counts=True)
         weights = np.zeros_like(weights)
@@ -20,20 +21,20 @@ def find_mds_iterative(adj_matrix, nb_iters, rnds):
             weights[max_idxs[i]] = counts[i]
         weights = weights + rnds
 
-        neigh_weights = adj_matrix * np.transpose([weights])
-        max_neighs = neigh_weights.argmax(axis=0)
+        neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+        max_neighs = neigh_weights.argmax(axis=0).A1
 
     return np.unique(max_neighs).tolist()
 
 
 def find_mds_max_degree_count(adj_matrix, nb_iters, rnds):
-    out_degrees = adj_matrix.sum(axis=1)
+    out_degrees = adj_matrix.sum(axis=1).A1
     weights = out_degrees + rnds
 
-    neigh_weights = adj_matrix * np.transpose([weights])
-    max_degree_neighs = neigh_weights.argmax(axis=0)
+    neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+    max_degree_neighs = neigh_weights.argmax(axis=0).A1
     max_dominate_neighs = np.copy(max_degree_neighs)
-
+    
     for iter in range(nb_iters):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
@@ -41,34 +42,35 @@ def find_mds_max_degree_count(adj_matrix, nb_iters, rnds):
             weights[max_idxs[i]] = counts[i]
         weights = weights + rnds
 
-        neigh_weights = adj_matrix * np.transpose([weights])
-        max_dominate_neighs = neigh_weights.argmax(axis=0)
+        neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+        max_dominate_neighs = neigh_weights.argmax(axis=0).A1
 
-    new_adj_matrix = np.zeros_like(adj_matrix)
-    new_adj_matrix[max_degree_neighs, max_dominate_neighs] = 1
-    new_adj_matrix[max_dominate_neighs, max_degree_neighs] = 1
+    rows = np.append(max_degree_neighs, max_dominate_neighs)
+    cols = np.append(max_dominate_neighs, max_degree_neighs)
+    rows, cols = zip(*set(zip(rows, cols)))
 
-    vertex_cover = []
+    new_adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=adj_matrix.get_shape())
 
-    for i in range(len(new_adj_matrix)):
-        if new_adj_matrix[i,i] == 1:
-            vertex_cover.append(i)
-            new_adj_matrix[i,:] = 0
-            new_adj_matrix[:,i] = 0
+    vertex_cover = new_adj_matrix.diagonal().nonzero()[0].tolist()
+    nonzero_in_rows = new_adj_matrix[np.array(vertex_cover),:].nonzero()
+    new_adj_matrix[np.array(vertex_cover)[nonzero_in_rows[0]], nonzero_in_rows[1]] = 0
+    nonzero_in_columns = new_adj_matrix[:,np.array(vertex_cover)].nonzero()
+    new_adj_matrix[nonzero_in_columns[0], np.array(vertex_cover)[nonzero_in_columns[1]]] = 0
+    new_adj_matrix.eliminate_zeros()
 
-    new_graph = nx.from_numpy_matrix(new_adj_matrix)
+    new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
     vertex_cover += list(min_weighted_vertex_cover(new_graph))
 
     return vertex_cover
 
 
 def find_mds_max_count_seprate_neigh(adj_matrix, nb_iters, rnds):
-    out_degrees = adj_matrix.sum(axis=1)
+    out_degrees = adj_matrix.sum(axis=1).A1
     weights = out_degrees + rnds
 
-    neigh_weights = adj_matrix * np.transpose([weights])
-    max_dominate_neighs = neigh_weights.argmax(axis=0)
-
+    neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+    max_dominate_neighs = neigh_weights.argmax(axis=0).A1
+    
     for iter in range(nb_iters):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
@@ -76,24 +78,30 @@ def find_mds_max_count_seprate_neigh(adj_matrix, nb_iters, rnds):
             weights[max_idxs[i]] = counts[i]
         weights = weights + rnds
 
-        neigh_weights = adj_matrix * np.transpose([weights])
-        max_dominate_neighs = neigh_weights.argmax(axis=0)
+        neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+        max_dominate_neighs = neigh_weights.argmax(axis=0).A1
 
-    common_neigh_count = np.matmul(adj_matrix, adj_matrix.T)
-    common_neigh_count = common_neigh_count[max_dominate_neighs]
+    common_neigh_count = adj_matrix.dot(adj_matrix.T)
+    common_neigh_count = common_neigh_count[max_dominate_neighs,:]
 
-    seprate_neighs = (adj_matrix * np.transpose([out_degrees])).T - common_neigh_count
-    seprate_neighs[adj_matrix == 0] = np.iinfo(np.int32).min 
+    seprate_neighs = adj_matrix.multiply(np.transpose([out_degrees])+1).T - common_neigh_count
+    seprate_neighs = seprate_neighs.argmax(axis=1).A1
 
-    seprate_neighs = seprate_neighs.argmax(axis=1)
+    rows = np.append(seprate_neighs, max_dominate_neighs)
+    cols = np.append(max_dominate_neighs, seprate_neighs)
+    rows, cols = zip(*set(zip(rows, cols)))
 
-    new_adj_matrix = np.zeros_like(adj_matrix)
-    new_adj_matrix[seprate_neighs, max_dominate_neighs] = 1
-    new_adj_matrix[max_dominate_neighs, seprate_neighs] = 1
+    new_adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=adj_matrix.get_shape())
 
+    vertex_cover = new_adj_matrix.diagonal().nonzero()[0].tolist()
+    nonzero_in_rows = new_adj_matrix[np.array(vertex_cover),:].nonzero()
+    new_adj_matrix[np.array(vertex_cover)[nonzero_in_rows[0]], nonzero_in_rows[1]] = 0
+    nonzero_in_columns = new_adj_matrix[:,np.array(vertex_cover)].nonzero()
+    new_adj_matrix[nonzero_in_columns[0], np.array(vertex_cover)[nonzero_in_columns[1]]] = 0
+    new_adj_matrix.eliminate_zeros()
 
-    new_graph = nx.from_numpy_matrix(new_adj_matrix)
-    vertex_cover = list(min_weighted_vertex_cover(new_graph))
+    new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
+    vertex_cover += list(min_weighted_vertex_cover(new_graph))
 
     return vertex_cover
 
