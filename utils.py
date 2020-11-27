@@ -7,6 +7,11 @@ import PIL.Image as Image
 import PIL.ImageDraw as ImageDraw
 
 
+def add_loops(adj_matrix):
+    idx = np.arange(adj_matrix.shape[0])
+    adj_matrix[idx,idx] = 1
+
+
 def draw_polygon(points, radius):
     image = Image.new("RGB", (2*radius, 2*radius))
 

@@ -4,11 +4,15 @@ import pandas as pd
 from graph_loaders import MtxGraphLoader, TxtGraphLoader, DatGraphLoader
 from methods import find_mds_iterative, \
                     find_mds_max_degree_count, \
-                    find_mds_max_count_seprate_neigh
+                    find_mds_max_count_seprate_neigh, \
+                    find_mds_two_max_count
+from utils import add_loops
                         
 
 
 def main():
+    M = 5
+
     benchmarks = pd.read_csv('benchmarks.csv')
     for index, row in benchmarks.iterrows():
         try:
@@ -23,11 +27,12 @@ def main():
         
             adj_matrix = loader.get_adj_matrix()
 
+            add_loops(adj_matrix)
+
             sol = []
             rnds = np.random.rand(adj_matrix.shape[0])
-            sol.append(len(find_mds_iterative(adj_matrix, 5, rnds)))
-            sol.append(len(find_mds_max_degree_count(adj_matrix, 5, rnds)))
-            # sol.append(len(find_mds_max_count_seprate_neigh(adj_matrix, 5, rnds)))
+            sol.append(len(find_mds_iterative(adj_matrix, M, rnds)))
+            sol.append(len(find_mds_two_max_count(adj_matrix, M, rnds)))
         
             print(row['instance'], adj_matrix.shape, sol, flush=True)
             if row['format'] != 'dat' and index != len(benchmarks.index)-1:

@@ -107,6 +107,54 @@ def find_mds_max_count_seprate_neigh(adj_matrix, nb_iters, rnds):
     return vertex_cover
 
 
+def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
+    out_degrees = adj_matrix.sum(axis=1).A1
+    weights = out_degrees + rnds
+
+    neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+    max_dominate_neighs = neigh_weights.argmax(axis=0).A1
+    
+    for iter in range(nb_iters):
+        max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
+        weights = np.zeros_like(weights)
+        for i in range(len(max_idxs)):
+            weights[max_idxs[i]] = counts[i]
+        weights = weights + rnds
+
+        neigh_weights = adj_matrix.multiply(np.transpose([weights]))
+        max_dominate_neighs = neigh_weights.argmax(axis=0).A1
+
+    neigh_weights = neigh_weights.tocsr()
+    neigh_weights[max_dominate_neighs, np.arange(adj_matrix.shape[0])] = -1
+    second_max_dominate_neighs = neigh_weights.argmax(axis=0).A1
+    in_degrees = adj_matrix.sum(axis=0).A1
+    for i, d in enumerate(in_degrees):
+        if d == 1:
+            second_max_dominate_neighs[i] = max_dominate_neighs[i]
+        elif d == 0:
+            max_dominate_neighs[i] = i
+            second_max_dominate_neighs[i] = i
+    
+    rows = np.append(second_max_dominate_neighs, max_dominate_neighs)
+    cols = np.append(max_dominate_neighs, second_max_dominate_neighs)
+    rows, cols = zip(*set(zip(rows, cols)))
+
+    new_adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=adj_matrix.get_shape())
+    print(new_adj_matrix)
+
+    vertex_cover = new_adj_matrix.diagonal().nonzero()[0].tolist()
+    nonzero_in_rows = new_adj_matrix[np.array(vertex_cover),:].nonzero()
+    new_adj_matrix[np.array(vertex_cover)[nonzero_in_rows[0]], nonzero_in_rows[1]] = 0
+    nonzero_in_columns = new_adj_matrix[:,np.array(vertex_cover)].nonzero()
+    new_adj_matrix[nonzero_in_columns[0], np.array(vertex_cover)[nonzero_in_columns[1]]] = 0
+    new_adj_matrix.eliminate_zeros()
+
+    new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
+    vertex_cover += list(min_weighted_vertex_cover(new_graph))
+
+    return vertex_cover
+
+
 def find_min_dominating_set(graph, totally=False):
     nodes = set(range(len(graph)))
     for m in range(1, len(graph)):
