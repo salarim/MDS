@@ -140,7 +140,6 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
     rows, cols = zip(*set(zip(rows, cols)))
 
     new_adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=adj_matrix.get_shape())
-    print(new_adj_matrix)
 
     vertex_cover = new_adj_matrix.diagonal().nonzero()[0].tolist()
     nonzero_in_rows = new_adj_matrix[np.array(vertex_cover),:].nonzero()
