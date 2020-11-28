@@ -127,13 +127,10 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
     neigh_weights = neigh_weights.tocsr()
     neigh_weights[max_dominate_neighs, np.arange(adj_matrix.shape[0])] = -1
     second_max_dominate_neighs = neigh_weights.argmax(axis=0).A1
-    in_degrees = adj_matrix.sum(axis=0).A1
-    for i, d in enumerate(in_degrees):
-        if d == 1:
+
+    for i in range(adj_matrix.shape[0]):
+        if neigh_weights[max_dominate_neighs[i],i] < 1.0:
             second_max_dominate_neighs[i] = max_dominate_neighs[i]
-        elif d == 0:
-            max_dominate_neighs[i] = i
-            second_max_dominate_neighs[i] = i
     
     rows = np.append(second_max_dominate_neighs, max_dominate_neighs)
     cols = np.append(max_dominate_neighs, second_max_dominate_neighs)
