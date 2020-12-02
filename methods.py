@@ -36,7 +36,7 @@ def find_mds_max_degree_count(adj_matrix, nb_iters, rnds):
     max_degree_neighs = neigh_weights.argmax(axis=0).A1
     max_dominate_neighs = np.copy(max_degree_neighs)
     
-    for iter in range(nb_iters):
+    for iter in range(nb_iters+1):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
         for i in range(len(max_idxs)):
@@ -72,7 +72,7 @@ def find_mds_max_count_seprate_neigh(adj_matrix, nb_iters, rnds):
     neigh_weights = adj_matrix.multiply(np.transpose([weights]))
     max_dominate_neighs = neigh_weights.argmax(axis=0).A1
     
-    for iter in range(nb_iters):
+    for iter in range(nb_iters+1):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
         for i in range(len(max_idxs)):
@@ -114,7 +114,7 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
     neigh_weights = adj_matrix.multiply(np.transpose([weights]))
     max_dominate_neighs = neigh_weights.argmax(axis=0).A1
     
-    for iter in range(nb_iters):
+    for iter in range(nb_iters+1):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
         for i in range(len(max_idxs)):
@@ -129,7 +129,7 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
     second_max_dominate_neighs = neigh_weights.argmax(axis=0).A1
 
     for i in range(adj_matrix.shape[0]):
-        if neigh_weights[max_dominate_neighs[i],i] < 1.0:
+        if neigh_weights[second_max_dominate_neighs[i],i] < 1.0:
             second_max_dominate_neighs[i] = max_dominate_neighs[i]
     
     rows = np.append(second_max_dominate_neighs, max_dominate_neighs)
