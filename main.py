@@ -27,10 +27,14 @@ def main():
         
             adj_matrix = loader.get_adj_matrix()
 
-            add_loops(adj_matrix)
 
             sol = []
             rnds = np.random.rand(adj_matrix.shape[0])
+
+            sol.append(len(find_mds_iterative(adj_matrix, M, rnds)))
+            sol.append(len(find_mds_two_max_count(adj_matrix, M, rnds)))
+
+            add_loops(adj_matrix)
             sol.append(len(find_mds_iterative(adj_matrix, M, rnds)))
             sol.append(len(find_mds_two_max_count(adj_matrix, M, rnds)))
         
