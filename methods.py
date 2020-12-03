@@ -6,6 +6,7 @@ import networkx as nx
 from networkx.algorithms.approximation.vertex_cover import min_weighted_vertex_cover
 
 from utils import create_networkx_graph, extract_max_new_degree, choose_random, normalize
+from utils import add_loops
 
 
 def find_mds_iterative(adj_matrix, nb_iters, rnds):
@@ -107,14 +108,14 @@ def find_mds_max_count_seprate_neigh(adj_matrix, nb_iters, rnds):
     return vertex_cover
 
 
-def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
+def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False):
     out_degrees = adj_matrix.sum(axis=1).A1
     weights = out_degrees + rnds
 
     neigh_weights = adj_matrix.multiply(np.transpose([weights]))
     max_dominate_neighs = neigh_weights.argmax(axis=0).A1
     
-    for iter in range(nb_iters+1):
+    for i in range(nb_iters+1):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
         for i in range(len(max_idxs)):
@@ -123,6 +124,9 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds):
 
         neigh_weights = adj_matrix.multiply(np.transpose([weights]))
         max_dominate_neighs = neigh_weights.argmax(axis=0).A1
+
+        if i == nb_iters-1 and add_loops_in_middle:
+            adj_matrix = add_loops(adj_matrix)
 
     neigh_weights = neigh_weights.tocsr()
     neigh_weights[max_dominate_neighs, np.arange(adj_matrix.shape[0])] = -1

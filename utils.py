@@ -1,5 +1,6 @@
 import random
 import itertools
+from copy import deepcopy
 
 import numpy as np
 import networkx as nx
@@ -8,8 +9,11 @@ import PIL.ImageDraw as ImageDraw
 
 
 def add_loops(adj_matrix):
+    adj_matrix = deepcopy(adj_matrix)
     idx = np.arange(adj_matrix.shape[0])
     adj_matrix[idx,idx] = 1
+    
+    return adj_matrix
 
 
 def draw_polygon(points, radius):

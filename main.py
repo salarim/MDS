@@ -33,10 +33,7 @@ def main():
 
             sol.append(len(find_mds_iterative(adj_matrix, M, rnds)))
             sol.append(len(find_mds_two_max_count(adj_matrix, M, rnds)))
-
-            add_loops(adj_matrix)
-            sol.append(len(find_mds_iterative(adj_matrix, M, rnds)))
-            sol.append(len(find_mds_two_max_count(adj_matrix, M, rnds)))
+            sol.append(len(find_mds_two_max_count(adj_matrix, M, rnds, add_loops_in_middle=True)))
         
             print(row['instance'], adj_matrix.shape, sol, flush=True)
             if row['format'] != 'dat' and index != len(benchmarks.index)-1:
