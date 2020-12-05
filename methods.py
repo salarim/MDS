@@ -115,7 +115,7 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False
     neigh_weights = adj_matrix.multiply(np.transpose([weights]))
     max_dominate_neighs = neigh_weights.argmax(axis=0).A1
     
-    for i in range(nb_iters+1):
+    for it in range(nb_iters+1):
         max_idxs, counts = np.unique(max_dominate_neighs, return_counts=True)
         weights = np.zeros_like(weights)
         for i in range(len(max_idxs)):
@@ -125,7 +125,7 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False
         neigh_weights = adj_matrix.multiply(np.transpose([weights]))
         max_dominate_neighs = neigh_weights.argmax(axis=0).A1
 
-        if i == nb_iters-1 and add_loops_in_middle:
+        if it == nb_iters-1 and add_loops_in_middle:
             adj_matrix = add_loops(adj_matrix)
 
     neigh_weights = neigh_weights.tocsr()
