@@ -1,4 +1,4 @@
-# Polygon
+# Approximating algorithms for Minimum Dominating Set
 
 # Requirements
 
