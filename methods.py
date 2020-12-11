@@ -29,12 +29,17 @@ def find_mds_iterative(adj_matrix, nb_iters, rnds):
     return np.unique(max_neighs).tolist()
 
 
-def find_mds_max_degree_count(adj_matrix, nb_iters, rnds):
+def find_mds_max_degree_count(adj_matrix, nb_iters, rnds, exact=False):
     out_degrees = adj_matrix.sum(axis=1).A1
     weights = out_degrees + rnds
-
+    
     neigh_weights = adj_matrix.multiply(np.transpose([weights]))
     max_degree_neighs = neigh_weights.argmax(axis=0).A1
+
+    neigh_weights = neigh_weights.tocsr()
+    neigh_weights[max_degree_neighs, np.arange(adj_matrix.shape[0])] = -1
+    second_max_degree_neighs = neigh_weights.argmax(axis=0).A1
+
     max_dominate_neighs = np.copy(max_degree_neighs)
     
     for iter in range(nb_iters+1):
@@ -47,6 +52,10 @@ def find_mds_max_degree_count(adj_matrix, nb_iters, rnds):
         neigh_weights = adj_matrix.multiply(np.transpose([weights]))
         max_dominate_neighs = neigh_weights.argmax(axis=0).A1
 
+    for i in range(adj_matrix.shape[0]):
+        if  max_degree_neighs[i] == max_dominate_neighs[i]:
+            max_degree_neighs[i] = second_max_degree_neighs[i]
+    
     rows = np.append(max_degree_neighs, max_dominate_neighs)
     cols = np.append(max_dominate_neighs, max_degree_neighs)
     rows, cols = zip(*set(zip(rows, cols)))
@@ -60,8 +69,11 @@ def find_mds_max_degree_count(adj_matrix, nb_iters, rnds):
     new_adj_matrix[nonzero_in_columns[0], np.array(vertex_cover)[nonzero_in_columns[1]]] = 0
     new_adj_matrix.eliminate_zeros()
 
-    new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
-    vertex_cover += list(min_weighted_vertex_cover(new_graph))
+    if exact:
+        vertex_cover += find_min_vertex_cover(new_adj_matrix.A)[1]
+    else:
+        new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
+        vertex_cover += list(min_weighted_vertex_cover(new_graph))
 
     return vertex_cover
 
