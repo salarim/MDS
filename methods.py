@@ -108,7 +108,7 @@ def find_mds_max_count_seprate_neigh(adj_matrix, nb_iters, rnds):
     return vertex_cover
 
 
-def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False):
+def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False, exact=False):
     out_degrees = adj_matrix.sum(axis=1).A1
     weights = out_degrees + rnds
 
@@ -149,8 +149,11 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False
     new_adj_matrix[nonzero_in_columns[0], np.array(vertex_cover)[nonzero_in_columns[1]]] = 0
     new_adj_matrix.eliminate_zeros()
 
-    new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
-    vertex_cover += list(min_weighted_vertex_cover(new_graph))
+    if exact:
+        vertex_cover += find_min_vertex_cover(new_adj_matrix.A)[1]
+    else:
+        new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
+        vertex_cover += list(min_weighted_vertex_cover(new_graph))
 
     return vertex_cover
 
