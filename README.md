@@ -1,4 +1,4 @@
-# Approximating algorithms for Minimum Dominating Set
+# Approximation algorithms for Minimum Dominating Set
 
 # Requirements
 
