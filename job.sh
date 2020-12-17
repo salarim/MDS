@@ -9,8 +9,8 @@
 #SBATCH --mem=100G
 
 cd $SLURM_TMPDIR
-cp -r ~/scratch/polygon .
-cd polygon
+cp -r ~/scratch/MDS .
+cd MDS
 
 module load python/3.7 cuda/10.0
 virtualenv --no-download venv
