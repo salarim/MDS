@@ -26,7 +26,7 @@ def find_mds_iterative(adj_matrix, nb_iters, rnds):
         neigh_weights = adj_matrix.multiply(np.transpose([weights]))
         max_neighs = neigh_weights.argmax(axis=0).A1
 
-    return np.unique(max_neighs).tolist()
+    return np.unique(max_neighs).tolist() + np.where(degrees == 0)[0].tolist()
 
 
 def find_mds_max_degree_count(adj_matrix, nb_iters, rnds, exact=False):
@@ -166,8 +166,9 @@ def find_mds_two_max_count(adj_matrix, nb_iters, rnds, add_loops_in_middle=False
     else:
         new_graph = nx.from_scipy_sparse_matrix(new_adj_matrix)
         vertex_cover += list(min_weighted_vertex_cover(new_graph))
-
-    return vertex_cover
+    
+    out_degrees = adj_matrix.sum(axis=1).A1
+    return vertex_cover +  np.where(out_degrees == 0)[0].tolist()
 
 
 def find_min_dominating_set(graph, totally=False):
