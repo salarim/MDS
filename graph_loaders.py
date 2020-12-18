@@ -40,6 +40,17 @@ class MtxGraphLoader:
                 f.seek(0, 0)
                 f.write('%' + content)
         adj_matrix = mmread(mtx_file_path)
+
+        edges = set()
+        rows, cols = adj_matrix.nonzero()
+        for row,col in zip(rows,cols):
+            edges.add((row, col))
+            edges.add((col, row))
+
+        rows = [x[0] for x in edges]
+        cols = [x[1] for x in edges]
+        adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=adj_matrix.shape)
+
         return adj_matrix.tocsr()
 
     def clean(self):
@@ -82,8 +93,8 @@ class TxtGraphLoader:
         
         ids = list(ids)
         id_to_idx = {id:i for i, id in enumerate(ids)}
-        rows = []
-        cols = []
+        
+        edges = set()
         with open(txtfile_path) as f: 
             for line in f:
                 if line[0] != '#':
@@ -91,9 +102,11 @@ class TxtGraphLoader:
                     v1, v2 = int(line[0]), int(line[1])
                     idx1 = id_to_idx[v1]
                     idx2 = id_to_idx[v2]
-                    rows.append(idx1)
-                    cols.append(idx2)
-        
+                    edges.add((idx1,idx2))
+                    edges.add((idx2,idx1))
+
+        rows = [x[0] for x in edges]
+        cols = [x[1] for x in edges]
         adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=(len(ids), len(ids)))
         return adj_matrix
     
@@ -137,8 +150,16 @@ class DatGraphLoader:
                     line = np.array(line)
                     adj_matrix[vertex_idx,:] = line
 
-        sparse_adj_matrix = csr_matrix(adj_matrix)
-        return sparse_adj_matrix
+        edges = set()
+        for i in range(adj_matrix.shape[0]):
+            for j in range(adj_matrix.shape[1]):
+                edges.add((i, j))
+                edges.add((j, i))
+
+        rows = [x[0] for x in edges]
+        cols = [x[1] for x in edges]
+        adj_matrix = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=adj_matrix.shape)
+        return adj_matrix
 
     def clean(self):
         shutil.rmtree('T1')
