@@ -61,23 +61,23 @@ web-NotreDame,http://nrvis.com/download/data/web/web-NotreDame.zip,mtx
 web-BerkStan-dir,http://nrvis.com/download/data/web/web-BerkStan-dir.zip,mtx
 web-it-2004,http://nrvis.com/download/data/web/web-it-2004.zip,mtx
 web-italycnr-2000,http://nrvis.com/download/data/web/web-italycnr-2000.zip,mtx
-Amazon0302(V262K E1.2M),http://nrvis.com/download/data/misc/amazon0302.zip,mtx
-Amazon0312(V400K E3.2M),http://nrvis.com/download/data/misc/amazon0312.zip,mtx
-Amazon0505(V410K E3.3M),http://nrvis.com/download/data/misc/amazon0505.zip,mtx
-Amazon0601(V403K E3.3M),http://nrvis.com/download/data/misc/amazon0601.zip,mtx
-email-EuAll(V265K E420K),http://nrvis.com/download/data/misc/email-EuAll.zip,mtx
-p2p-Gnutella24(V26K E65K),http://nrvis.com/download/data/misc/p2p-Gnutella24.zip,mtx
-p2p-Gnutella25(V22K E54K),http://nrvis.com/download/data/misc/p2p-Gnutella25.zip,mtx
-p2p-Gnutella30(V36K E88K),http://nrvis.com/download/data/misc/p2p-Gnutella30.zip,mtx
-p2p-Gnutella31(V62K E147K),http://nrvis.com/download/data/misc/p2p-Gnutella31.zip,mtx
-soc-sign-Slashdot081106(V77K E516K),http://nrvis.com/download/data/soc/soc-sign-Slashdot081106.zip,mtx
-soc-sign-Slashdot090216(V81K E545K),http://nrvis.com/download/data/soc/soc-sign-Slashdot090216.zip,mtx
-soc-sign-Slashdot090221(V82K E549K),http://nrvis.com/download/data/soc/soc-sign-Slashdot090221.zip,mtx
-soc-Epinions1(V75K E508K),http://nrvis.com/download/data/dimacs10/soc-Epinions1.zip,mtx
-web-BerkStan(V685K E7.6M),http://nrvis.com/download/data/web/web-BerkStan.zip,mtx
-web-Stanford(V281K E2.3M),http://nrvis.com/download/data/web/web-Stanford.zip,mtx
+Amazon0302(V262K E1.2M),http://snap.stanford.edu/data/amazon0302.txt.gz,txt
+Amazon0312(V400K E3.2M),http://snap.stanford.edu/data/amazon0312.txt.gz,txt
+Amazon0505(V410K E3.3M),http://snap.stanford.edu/data/amazon0505.txt.gz,txt
+Amazon0601(V403K E3.3M),http://snap.stanford.edu/data/amazon0601.txt.gz,txt
+email-EuAll(V265K E420K),http://snap.stanford.edu/data/email-EuAll.txt.gz,txt
+p2p-Gnutella24(V26K E65K),http://snap.stanford.edu/data/p2p-Gnutella24.txt.gz,txt
+p2p-Gnutella25(V22K E54K),http://snap.stanford.edu/data/p2p-Gnutella25.txt.gz,txt
+p2p-Gnutella30(V36K E88K),http://snap.stanford.edu/data/p2p-Gnutella30.txt.gz,txt
+p2p-Gnutella31(V62K E147K),http://snap.stanford.edu/data/p2p-Gnutella31.txt.gz,txt
+soc-sign-Slashdot081106(V77K E516K),http://snap.stanford.edu/data/soc-sign-Slashdot081106.txt.gz,txt
+soc-sign-Slashdot090216(V81K E545K),http://snap.stanford.edu/data/soc-sign-Slashdot090216.txt.gz,txt
+soc-sign-Slashdot090221(V82K E549K),http://snap.stanford.edu/data/soc-sign-Slashdot090221.txt.gz,txt
+soc-Epinions1(V75K E508K),http://snap.stanford.edu/data/soc-Epinions1.txt.gz,txt
+web-BerkStan(V685K E7.6M),http://snap.stanford.edu/data/web-BerkStan.txt.gz,txt
+web-Stanford(V281K E2.3M),http://snap.stanford.edu/data/web-Stanford.txt.gz,txt
 wiki-Talk(V2.3M E5M),http://snap.stanford.edu/data/wiki-Talk.txt.gz,txt
-web-NotreDame(V325K E1.5M),http://nrvis.com/download/data/web/web-NotreDame.zip,mtx
+web-NotreDame(V325K E1.5M),http://snap.stanford.edu/data/web-NotreDame.txt.gz,txt
 wiki-Vote(V7K E103K),http://snap.stanford.edu/data/wiki-Vote.txt.gz,txt
 cit-HepPh(V34K E421K),http://snap.stanford.edu/data/cit-HepPh.txt.gz,txt
 cit-HepTh(V27K E352K),http://snap.stanford.edu/data/cit-HepTh.txt.gz,txt
