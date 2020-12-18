@@ -153,8 +153,9 @@ class DatGraphLoader:
         edges = set()
         for i in range(adj_matrix.shape[0]):
             for j in range(adj_matrix.shape[1]):
-                edges.add((i, j))
-                edges.add((j, i))
+                if adj_matrix[i][j] == 1:
+                    edges.add((i, j))
+                    edges.add((j, i))
 
         rows = [x[0] for x in edges]
         cols = [x[1] for x in edges]
